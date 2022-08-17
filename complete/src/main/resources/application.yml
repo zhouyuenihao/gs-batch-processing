@@ -5,10 +5,21 @@ spring:
     password: 1234567a
     username: mosuser
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 3000
+      idle-timeout: 30000
+      max-lifetime: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
   batch:
     jdbc:
-      initialize-schema: always
+      initialize-schema: NEVER
 server:
   port: 8080
 
+#logging:
+#  level:
+#    org.springframework: debug
 
