@@ -5,20 +5,30 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.batch.item.ItemProcessor;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class PersonItemProcessor implements ItemProcessor<Person, Person> {
 
-	private static final Logger log = LoggerFactory.getLogger(PersonItemProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(PersonItemProcessor.class);
+    private final Map<Person, Object> map = new ConcurrentHashMap<>();
+    private Object object = new Object();
 
-	@Override
-	public Person process(final Person person) throws Exception {
-		final String firstName = person.getFirstName().toUpperCase();
-		final String lastName = person.getLastName().toUpperCase();
 
-		final Person transformedPerson = new Person(firstName, lastName);
+    @Override
+    public Person process(final Person person) throws Exception {
+        if (map.containsKey(person)) {
+            return null;
+        }
 
-		log.info("Converting (" + person + ") into (" + transformedPerson + ")");
+        final String firstName = person.getFirstName().toUpperCase();
+        final String lastName = person.getLastName().toUpperCase();
 
-		return transformedPerson;
-	}
+        final Person transformedPerson = new Person(firstName, lastName);
+
+        log.info("Converting (" + person + ") into (" + transformedPerson + ")");
+        map.putIfAbsent(person, object);
+        return transformedPerson;
+    }
 
 }

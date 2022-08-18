@@ -1,5 +1,7 @@
 package com.example.batchprocessing;
 
+import java.util.Objects;
+
 public class Person {
 
 	private String lastName;
@@ -33,5 +35,24 @@ public class Person {
 	public String toString() {
 		return "firstName: " + firstName + ", lastName: " + lastName;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Person person = (Person) o;
+		return lastName.equals(person.lastName) &&
+				firstName.equals(person.firstName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(lastName, firstName);
+	}
+
 
 }
